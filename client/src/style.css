@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+.drinkImage{
+    width: 350px;
+    height: 350px;
+
+}
+
+  body{
+    overflow: scroll;
+  }
+
+  .navigation{
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 2;
+  }
+
+  .searchBar{
+  position:fixed;
+  z-index: 3;
+    border-radius: 6px;
+    padding: 2px;
+    top: 17px;
+    left: 475px;
+    padding-left: 8px;
+}
+
+.err_kom{
+  text-align: center;
+}
+
+.tabelaStat{
+  border: solid 2px black;
+  width: 500px;
+  text-align: center;
+}
+th{
+  border: solid 2px  black;
+}
+td{
+  border: dotted 2px  black;
+}
