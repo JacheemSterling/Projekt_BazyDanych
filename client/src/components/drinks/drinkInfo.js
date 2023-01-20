@@ -1,14 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { useContext } from "react";
 import { loggedContext } from "../../App";
 import SimpleRating from "./ratingStars";
 
 export default function DrinkInfo({ drink }) {
   const isLogged = useContext(loggedContext);
-
-  const dispatch = useDispatch();
 
   return (
     <div className="relative flex flex-col items-center mb-10 bg-stone-300 p-7 rounded-md shadow-md w-[600px] text-lg">
@@ -21,10 +18,10 @@ export default function DrinkInfo({ drink }) {
       <b>Typ: </b>
       <p>{drink.type}</p>
       <div>
-        <SimpleRating drink={drink} />
+        <SimpleRating drink={drink} key={drink._id} />
       </div>
       <button className="text-lg bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">
-        <Link className="w-[350px]" to={`/${drink.id}`}>
+        <Link className="w-[350px]" to={`/${drink._id}`}>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           Szczegóły
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -34,7 +31,11 @@ export default function DrinkInfo({ drink }) {
       {isLogged.user.type === "admin" ? (
         <button
           className="text-lg bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
-          onClick={() => dispatch({ type: "DELETE_DRINK", payload: drink.id })}
+          onClick={() =>
+            fetch(`http://localhost:5000/drinks/delete/${drink._id}`, {
+              method: "DELETE",
+            })
+          }
         >
           Usuń
         </button>

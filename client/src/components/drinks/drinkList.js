@@ -1,29 +1,45 @@
-import React, { useEffect, useContext } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useContext, useState } from "react";
 import DrinkInfo from "./drinkInfo";
 import { loggedContext } from "../../App";
 import DrinkForm from "./drinkForm";
 
 export default function DrinkList() {
   const isLogged = useContext(loggedContext);
-  const drinks = useSelector((state) => state.drinks);
 
-  const [search, setSearch] = React.useState("");
-  const [filteredDrinks, setFilteredDrinks] = React.useState(drinks);
-  const [searchErr, setSearchErr] = React.useState("");
+  const [search, setSearch] = useState("");
+  const [filteredDrinks, setFilteredDrinks] = useState([]);
+  const [searchErr, setSearchErr] = useState("");
+
+  const [drinks, setDrinkList] = useState();
+  const [loaded, finishLoading] = useState(false);
 
   useEffect(() => {
-    setFilteredDrinks(
-      drinks.filter((drink) =>
-        drink.name.toLowerCase().includes(search.toLowerCase())
-      )
-    );
-    if (filteredDrinks.length === 0 && search !== "") {
-      setSearchErr("Nie znaleziono drinka o podanej nazwie");
-    } else {
-      setSearchErr("");
+    fetch("http://localhost:5000/drinks")
+      .then((res) => res.json())
+      .then(
+        (data) => {
+          setDrinkList(data);
+          finishLoading(true);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+
+    if (loaded === true) {
+      setFilteredDrinks(
+        drinks.filter((drink) => {
+          return drink.name.toLowerCase().includes(search.toLowerCase());
+        })
+      );
+
+      if (filteredDrinks.length === 0 && search !== "") {
+        setSearchErr("Nie znaleziono drinka");
+      } else {
+        setSearchErr("");
+      }
     }
-  }, [search, drinks, filteredDrinks.length]);
+  }, [search, loaded, drinks, filteredDrinks.length]);
 
   return (
     <div key="drinkList" className="mt-[100px] flex flex-col items-center">
@@ -41,20 +57,25 @@ export default function DrinkList() {
           setSearch(e.target.value);
         }}
       />
-      {filteredDrinks.length === 0 && searchErr === "" ? (
-        <p>
-          Brak drinków
-          <br />
-          <br />
-        </p>
+      {loaded ? (
+        drinks.length === 0 ? (
+          <p>
+            <br />
+            Brak drinków
+            <br />
+            <br />
+          </p>
+        ) : (
+          filteredDrinks.map((drink) => (
+            <DrinkInfo drink={drink} key={drink._id} />
+          ))
+        )
       ) : (
-        filteredDrinks.map((drink) => (
-          <DrinkInfo drink={drink} key={drink.id} />
-        ))
+        <p>Ladowanie</p>
       )}
-
       {searchErr ? (
         <p>
+          <br />
           {searchErr}
           <br />
           <br />

@@ -1,12 +1,9 @@
-import { useDispatch } from "react-redux";
 import { loggedContext } from "../../App";
 import { useFormik } from "formik";
 import { useContext } from "react";
 
 export default function DrinkEdit({ drink }) {
   const isLogged = useContext(loggedContext);
-
-  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -20,7 +17,20 @@ export default function DrinkEdit({ drink }) {
       grades: drink.grades,
     },
     onSubmit: (values) => {
-      dispatch({ type: "UPDATE_DRINK", payload: values });
+      fetch(`http://localhost:5000/drinks/update/${drink._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: values.name,
+          type: values.type,
+          type_of_glass: values.type_of_glass,
+          recipe: values.recipe,
+          ingredients: values.ingredients,
+          image: values.image,
+        }),
+      });
     },
   });
 

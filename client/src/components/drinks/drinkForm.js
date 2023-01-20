@@ -1,24 +1,9 @@
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
 import React from "react";
-import { useSelector } from "react-redux";
 
 export default function DrinkForm() {
-  const drinks = useSelector((state) => state.drinks);
-
-  const dispatch = useDispatch();
-
-  const id = () => {
-    if (drinks.length === 0) {
-      return 1;
-    } else {
-      return drinks[drinks.length - 1].id + 1;
-    }
-  };
-
   const formik = useFormik({
     initialValues: {
-      id: id(),
       name: "",
       type: "",
       image: "",
@@ -28,13 +13,33 @@ export default function DrinkForm() {
       grades: [],
     },
     onSubmit: (values) => {
-      if(values.name !== "" || values.type !== "" || values.image !== "" || values.glass !== "" || values.ingredients !== "" || values.recipe !== "")
-      {
-      dispatch({ type: "ADD_DRINK", payload: values });
-      formik.resetForm();
-    }else{
-      alert("Wypełnij wszystkie pola!")
-    }
+      if (
+        values.name !== "" ||
+        values.type !== "" ||
+        values.image !== "" ||
+        values.glass !== "" ||
+        values.ingredients !== "" ||
+        values.recipe !== ""
+      ) {
+        fetch("http://localhost:5000/drinks/add", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: values.name,
+            type: values.type,
+            image: values.image,
+            glass: values.glass,
+            ingredients: values.ingredients,
+            recipe: values.recipe,
+            grades: values.grades,
+          }),
+        });
+        formik.resetForm();
+      } else {
+        alert("Wypełnij wszystkie pola!");
+      }
     },
   });
 
