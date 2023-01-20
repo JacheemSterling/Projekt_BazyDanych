@@ -1,16 +1,12 @@
 import { useFormik } from "formik";
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { loggedContext } from "../../App";
 
 export default function CommentForm({ user }) {
-  const [id, setId] = useState(0);
-
   const isLogged = useContext(loggedContext);
-
 
   const formik = useFormik({
     initialValues: {
-      id: id,
       comment: "",
     },
     onSubmit: (values) => {
@@ -24,12 +20,10 @@ export default function CommentForm({ user }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          id: values.id,
           comment: values.comment,
           user: user,
         }),
       });
-      setId(id + 1);
       formik.resetForm();
     },
   });

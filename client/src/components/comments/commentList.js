@@ -1,23 +1,23 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import CommentInfo from "./commentInfo";
 
 export default function CommentList() {
-  const [comments, setCommentList] = useState()
-  const [loaded, finishLoading] = useState(false)
-
+  const [comments, setCommentList] = useState();
+  const [loaded, finishLoading] = useState(false);
 
   useEffect(() => {
     fetch("http://localhost:5000/comments")
       .then((res) => res.json())
-      .then((data) => {
-        setCommentList(data);
-        finishLoading(true);
-      }, 
-      (error) => {
-        console.log(error);
-      });
-        
-  }, []);
+      .then(
+        (data) => {
+          setCommentList(data);
+          finishLoading(true);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  });
 
   return (
     <div className="flex flex-col items-center">
@@ -25,14 +25,18 @@ export default function CommentList() {
         <b>Komentarze: </b>
         <br />
         <br />
-        {loaded ? ( comments.length === 0 ? (<p>Brak komentarzy</p>) :
-          comments.map((comment) => (
-            <CommentInfo comment={comment} key={comment.id}/>
-          ))
-        ) : (<p>Ladowanie</p>)
-        }
+        {loaded ? (
+          comments.length === 0 ? (
+            <p>Brak komentarzy</p>
+          ) : (
+            comments.map((comment) => (
+              <CommentInfo comment={comment} key={comment.id} />
+            ))
+          )
+        ) : (
+          <p>Ladowanie</p>
+        )}
       </div>
     </div>
   );
 }
-

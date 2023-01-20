@@ -1,12 +1,8 @@
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
 
 export default function CommentEditForm({ comment }) {
-  const dispatch = useDispatch();
-
   const formik = useFormik({
     initialValues: {
-      id: comment.id,
       user: comment.user,
       comment: comment.comment,
     },
@@ -15,7 +11,17 @@ export default function CommentEditForm({ comment }) {
         alert("Komentarz nie może być pusty");
         return;
       }
-      dispatch({ type: "UPDATE_COMMENT", payload: values });
+      fetch(`http://localhost:5000/comments/update/${comment._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          comment: values.comment,
+          user: values.user,
+        }),
+      });
+      formik.resetForm();
     },
   });
 
