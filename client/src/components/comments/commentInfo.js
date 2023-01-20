@@ -14,7 +14,7 @@ export default function CommentInfo({ comment }) {
       <br />
       {(isLogged && user.username === comment.user) ||
       (isLogged && user.type === "admin") ? (
-        <div className="commentButtons" class="float-right">
+        <div className="float-right">
           <button
             className="text-lg bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
             onClick={() =>
@@ -27,7 +27,7 @@ export default function CommentInfo({ comment }) {
           </button>
           <br />
           <br />
-          <CommentEditForm comment={comment} key={comment.id} />
+          <CommentEditForm comment={comment} key={comment._id} />
         </div>
       ) : null}
     </div>

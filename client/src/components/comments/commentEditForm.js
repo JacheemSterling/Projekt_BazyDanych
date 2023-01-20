@@ -30,7 +30,7 @@ export default function CommentEditForm({ comment }) {
       <form onSubmit={formik.handleSubmit}>
         <label htmlFor="comment">Edytuj komentarz: </label>
         <input
-          class="px-2 py-0.5 rounded-md mr-2"
+          className="px-2 py-0.5 rounded-md mr-2"
           type="text"
           id="comment"
           comment="comment"
@@ -40,7 +40,7 @@ export default function CommentEditForm({ comment }) {
         />
         <button
           type="submit"
-          class="text-lg bg-gray-900 text-white px-3 py-1.5 rounded-md text-sm font-medium"
+          className="text-lg bg-gray-900 text-white px-3 py-1.5 rounded-md text-sm font-medium"
         >
           Zapisz
         </button>

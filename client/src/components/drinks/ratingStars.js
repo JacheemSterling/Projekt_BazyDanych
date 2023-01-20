@@ -40,9 +40,9 @@ export default function SimpleRating({ drink }) {
                 });
               }}
             />
-            <Typography className="ocena">
+            <Typography className="text-center">
               {" "}
-              <b>&nbsp;&nbsp; Ocena: </b>
+              <b>Ocena: </b>
               {Math.round(avg * 10) / 10}
             </Typography>
           </div>

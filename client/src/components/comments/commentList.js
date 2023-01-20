@@ -30,7 +30,7 @@ export default function CommentList() {
             <p>Brak komentarzy</p>
           ) : (
             comments.map((comment) => (
-              <CommentInfo comment={comment} key={comment.id} />
+              <CommentInfo comment={comment} key={comment._id} />
             ))
           )
         ) : (

@@ -171,4 +171,113 @@ routes.route("/drinks/update/:id").post(function (req, response) {
       response.json(res);
     });
 });
+
+routes.route("/drinkscount").get(function (req, res) {
+  let db_connect = dbo.getDb("Projekt_Bazy");
+  db_connect
+    .collection("drinks")
+    .countDocuments({})
+    .then(function (count) {
+      res.json(count);
+    })
+    .catch(function (err) {
+      throw err;
+    });
+});
+
+routes.route("/drinksalcoholic").get(function (req, res) {
+  let db_connect = dbo.getDb("Projekt_Bazy");
+  db_connect
+    .collection("drinks")
+    .countDocuments({ $or: [{ type: "Alkoholowy" }, { type: "alkoholowy" }] })
+    .then(function (count) {
+      res.json(count);
+    })
+    .catch(function (err) {
+      throw err;
+    });
+});
+
+routes.route("/drinksrecipemax").get(function (req, res) {
+  let db_connect = dbo.getDb("Projekt_Bazy");
+  db_connect
+    .collection("drinks")
+    .aggregate([
+      {
+        $project: {
+          length: { $strLenCP: "$recipe" },
+        },
+      },
+      {
+        $sort: { length: -1 },
+      },
+      {
+        $limit: 1,
+      },
+    ])
+    .toArray(function (err, result) {
+      if (err) throw err;
+      res.json(result);
+    });
+});
+
+routes.route("/drinksrecipemin").get(function (req, res) {
+  let db_connect = dbo.getDb("Projekt_Bazy");
+  db_connect
+    .collection("drinks")
+    .aggregate([
+      {
+        $project: {
+          length: { $strLenCP: "$recipe" },
+        },
+      },
+      {
+        $sort: { length: 1 },
+      },
+      {
+        $limit: 1,
+      },
+    ])
+    .toArray(function (err, result) {
+      if (err) throw err;
+      res.json(result);
+    });
+});
+
+routes.route("/drinksrecipeavg").get(function (req, res) {
+  let db_connect = dbo.getDb("Projekt_Bazy");
+  db_connect
+    .collection("drinks")
+    .aggregate([
+      {
+        $project: {
+          length: { $strLenCP: "$recipe" },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          avg: { $avg: "$length" },
+        },
+      },
+    ])
+    .toArray(function (err, result) {
+      if (err) throw err;
+      res.json(result);
+    });
+});
+
+routes.route("/commentscount").get(function (req, res) {
+  let db_connect = dbo.getDb("Projekt_Bazy");
+  db_connect
+    .collection("comments")
+    .countDocuments({})
+    .then(function (count) {
+      res.json(count);
+    })
+    .catch(function (err) {
+      throw err;
+    });
+});
+
 module.exports = routes;

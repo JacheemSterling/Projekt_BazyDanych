@@ -29,6 +29,7 @@ export default function DrinkEdit({ drink }) {
           recipe: values.recipe,
           ingredients: values.ingredients,
           image: values.image,
+          grades: values.grades,
         }),
       });
     },
